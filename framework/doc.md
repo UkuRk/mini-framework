@@ -33,7 +33,7 @@ const myDiv = createElement({
 document.body.appendChild(myDiv);
 ```
 
-## Nesting Elements
+### Nesting Elements
 
 You can nest elements by including them in the children array of the parent element.
 
@@ -86,9 +86,9 @@ onEvent('click', '#my-button', () => {
 ```
 ### Explanation of How It Works
 
-    *Element Creation: The createElement function constructs DOM elements by accepting a configuration object that defines the tag, attributes, and children. This approach allows for a flexible way to build elements programmatically.
+*    Element Creation: The createElement function constructs DOM elements by accepting a configuration object that defines the tag, attributes, and children. This approach allows for a flexible way to build elements programmatically.
 
-   * Nesting Elements: The framework supports nesting by allowing child elements to be included within the parent element’s configuration, promoting a clear hierarchy and structure.
+*    Nesting Elements: The framework supports nesting by allowing child elements to be included within the parent element’s configuration, promoting a clear hierarchy and structure.
 
 *    Event Handling: By using event delegation through the onEvent function, you can attach events to specific elements efficiently, improving performance and simplifying event management.
 
