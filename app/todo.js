@@ -57,20 +57,28 @@ function renderTodos() {
 
     const todoList = createElement({
         tag: 'ul',
+        attrs: {class: 'todo-box-ul'},
         children: filteredTodos.map((todo, index) => ({
             tag: 'div',
             attrs: { class: 'todoBox' },
             children: [
                 {
-                    tag: 'button',
-                    attrs: { 'class': 'toggle', 'data-index': index },
-                    children: ['✓']
+                    tag: 'div',
+                    attrs: {class: 'button-and-li-div'},
+                    children: [
+                        {
+                            tag: 'button',
+                            attrs: { 'class': 'toggle', 'data-index': index },
+                            children: ['✓']
+                        },
+                        {
+                            tag: 'li',
+                            attrs: { class: todo.completed ? 'completed' : '' },
+                            children: [todo.text]
+                        },
+                    ]
                 },
-                {
-                    tag: 'li',
-                    attrs: { class: todo.completed ? 'completed' : '' },
-                    children: [todo.text]
-                },
+                
                 {
                     tag: 'button',
                     attrs: { 'class': 'destroy', 'data-index': index },
@@ -80,10 +88,19 @@ function renderTodos() {
         }))
     })
 
+    const todoHeader = createElement({
+        tag: 'h1',
+        attrs: {class: 'header'},
+        children: ['To do List']
+
+    })
+
     const todoInput = createElement({
         tag: 'div',
         attrs: { class: 'todoDiv' },
+        
         children: [
+            todoHeader,
             {
                 tag: 'div',
                 attrs: { class: 'inputDiv' },

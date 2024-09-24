@@ -1,55 +1,114 @@
+:root {
+    --background-color: #292C33;
+    --primary-color: #303339; 
+    --secondary-color: #FE9B33;
+    --background-for-div: rgba(232, 103, 38, 0.5);
+    --secondary-color-for-text: #7E7E7E;
+
+}
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    margin: 0;
-    padding: 20px;
+    background-color: var(--background-color);
+    margin: auto;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
 }
 
 #app {
     display: flex;
     flex-direction: column;
-    margin: auto;
-    width: 400px;
+    justify-content: center;
+    width: 100vh;
+    height: 100vh;
     border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: white;
 }
 
 .todoDiv {
-    padding: 10px;
+    background-color: var(--primary-color);
+    padding: 30px;
+    height: 70vh;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.header {
+    color: white;
+    margin-left: 5px;
+    font-size: 40px;
+    font-weight: 800;
 }
 
 .inputDiv {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
-    background-color: #e0e0e0;
-    border-radius: 4px;
+    padding: 30px;
+    background-color: var(--background-color);
+    border-radius: 20px;
+    margin-bottom: 20px;
 }
 
-ul {
+.inputDiv input {
+    width: 88%;
+    padding: 10px;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: white;
+    outline: none;
+}
+
+.inputDiv button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    padding: 12px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    background-color: #E86726;
+    transition: background-color 0.5s;
+    color: white;
+}
+
+.inputDiv button:hover {
+    background-color: var(--background-for-div);
+}
+
+.todo-box-ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    width: 100%;
 }
 
 .todoBox {
     display: flex;
-    position: relative;
-    background-color: #fafafa;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    margin-bottom: 10px;
+    background-color: var(--background-color);
+    border-radius: 20px;
+    height: 60px;
+}
+
+.button-and-li-div {
+    display: flex;
     align-items: center;
 }
 
-li {
-    flex-grow: 1;
+.button-and-li-div li {
     margin-right: 10px;
     word-wrap: break-word;
     max-width: 250px;
     overflow-wrap: break-word;
     padding: 10px;
+    color: white;
+    font-size: 30px;
 }
 
 .destroy {
@@ -67,9 +126,13 @@ li {
 }
 
 .footer {
-    background-color: #f0f0f0;
+    background-color: var(--primary-color);
+    border-top: 1px solid var(--secondary-color-for-text);
     text-align: center;
     padding: 5px;
+    color: white;
+    font-size: 20px;
+    border-radius: 0px 0px 20px 20px;
 }
 
 li.completed {
@@ -89,6 +152,7 @@ button {
 
 .footer button {
     margin: 10px;
+    font-size: 20px;
 }
 
 button:hover {
