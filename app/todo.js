@@ -4,8 +4,21 @@ import { onEvent } from "../framework/events.js";
 import { navigateTopath, onRouterChange } from "../framework/router.js";
 
 const state = createState({
-    todos: []
+    todos: [],
+    editingIndex: null,
 })
+
+function editTodo(index, newText) {
+    const { todos } = getState()
+    todos[index].text = newText
+    setState({ todos, editingIndex: null })
+    renderTodos()
+}
+
+function startEdit(index) {
+    setState({ editingIndex: Number(index) })
+    renderTodos()
+}
 
 function addTodo(text) {
     if (!text) return
@@ -42,8 +55,9 @@ let amount = 0
 
 function renderTodos() {
     amount = 0
-    const { todos } = getState()
+    const { todos, editingIndex } = getState()
     clear(document.getElementById('app'))
+    console.log(editingIndex)
 
     todos.forEach(todo => {
         if (!todo.completed) amount++
@@ -57,28 +71,37 @@ function renderTodos() {
 
     const todoList = createElement({
         tag: 'ul',
-        attrs: {class: 'todo-box-ul'},
+        attrs: { class: 'todo-box-ul' },
         children: filteredTodos.map((todo, index) => ({
             tag: 'div',
-            attrs: { class: 'todoBox' },
+            attrs: { class: 'todoBox', 'data-index': index },
             children: [
                 {
                     tag: 'div',
-                    attrs: {class: 'button-and-li-div'},
+                    attrs: { class: 'button-and-li-div' },
                     children: [
                         {
                             tag: 'button',
                             attrs: { 'class': 'toggle', 'data-index': index },
                             children: ['✓']
                         },
-                        {
+                        editingIndex === index ? {
+                            tag: 'input',
+                            attrs: {
+                                class: 'edit-input',
+                                type: 'text',
+                                value: todo.text,
+                                'data-index': index,
+                                id: 'edit-input'
+                            }
+                        } : {
                             tag: 'li',
-                            attrs: { class: todo.completed ? 'completed' : '' },
+                            attrs: { class: todo.completed ? 'completed' : '', 'data-index': index },
                             children: [todo.text]
                         },
                     ]
                 },
-                
+
                 {
                     tag: 'button',
                     attrs: { 'class': 'destroy', 'data-index': index },
@@ -90,7 +113,7 @@ function renderTodos() {
 
     const todoHeader = createElement({
         tag: 'h1',
-        attrs: {class: 'header'},
+        attrs: { class: 'header' },
         children: ['To do List']
 
     })
@@ -98,13 +121,17 @@ function renderTodos() {
     const todoInput = createElement({
         tag: 'div',
         attrs: { class: 'todoDiv' },
-        
+
         children: [
             todoHeader,
             {
                 tag: 'div',
                 attrs: { class: 'inputDiv' },
                 children: [
+                    {
+                        tag: 'button',
+                        attrs: { class: 'complete-all' }
+                    },
                     {
                         tag: 'input',
                         attrs: { type: 'text', id: 'new-todo', placeholder: 'Add a new todo...' }
@@ -152,8 +179,13 @@ function renderTodos() {
         })
         render(footer, document.getElementById('app'))
     }
-    const input = document.getElementById('new-todo')
-    if (input) input.focus()
+    if (editingIndex || editingIndex === 0) {
+        const input = document.getElementById('edit-input')
+        if (input) input.focus()
+    } else {
+        const input = document.getElementById('new-todo')
+        if (input) input.focus()
+    }
 }
 
 function handleRoute(path) {
@@ -175,6 +207,18 @@ onRouterChange(handleRoute)
 
 renderTodos()
 
+onEvent('click', '.complete-all', (event) => {
+    console.log(event)
+    const { todos } = getState()
+    const allCompleted = todos.every(todo => todo.completed)
+    const updatedTodos = todos.map(todo => ({
+        ...todo,
+        completed: !allCompleted
+    }))
+    setState({ todos: updatedTodos })
+    renderTodos()
+})
+
 onEvent('keypress', 'input#new-todo', (event) => {
     if (event.key === 'Enter') {
         const input = document.getElementById('new-todo')
@@ -183,6 +227,29 @@ onEvent('keypress', 'input#new-todo', (event) => {
         input.value = ''
     }
 })
+
+onEvent('dblclick', 'li', (event) => {
+    console.log(event)
+
+    const index = event.target.getAttribute('data-index')
+    console.log(index)
+    startEdit(index)
+})
+
+onEvent('keypress', 'input.edit-input', (event) => {
+    const index = event.target.getAttribute('data-index')
+    if (event.key === 'Enter') {
+        const newText = event.target.value
+        editTodo(index, newText)
+    }
+})
+
+onEvent('blur', 'input.edit-input', (event) => {
+    const index = event.target.getAttribute('data-index')
+    const newText = event.target.value
+    editTodo(index, newText)
+})
+
 
 onEvent('click', 'button.clear.completed', () => {
     removeCompleted()
@@ -202,6 +269,7 @@ onEvent('click', '#add-todo', () => {
 
 onEvent('click', 'button.toggle', (event) => {
     const index = event.target.getAttribute('data-index')
+    console.log(index)
     toggleTodo(index)
 })
 onEvent('click', 'button.destroy', (event) => {

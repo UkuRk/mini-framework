@@ -12,7 +12,7 @@ export function createElement({ tag, attrs = {}, children = [] }) {
             el.appendChild(document.createTextNode(child))
         } else if (child instanceof HTMLElement) {
             el.appendChild(child)
-        } else {
+        } else if (child) {
             el.appendChild(createElement(child))
         }
     })
